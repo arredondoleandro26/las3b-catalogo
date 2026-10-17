@@ -339,3 +339,13 @@ dialog.np menu{flex-wrap:wrap}
 .cargando .sp{display:inline-block;width:34px;height:34px;border:4px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:girar .9s linear infinite;margin-bottom:12px}
 @keyframes girar{to{transform:rotate(360deg)}}
 .error{max-width:520px;margin:60px auto;padding:20px;background:#fff;border:2px solid var(--red);border-radius:16px;color:var(--ink)}
+
+/* ---------- botón flotante de WhatsApp ---------- */
+.wa-flot{position:fixed;left:16px;bottom:16px;z-index:35;display:flex;align-items:center;gap:8px;height:56px;min-width:56px;padding:0 13px;border:0;border-radius:999px;background:#25d366;color:#fff;box-shadow:0 8px 22px rgba(37,211,102,.45);transition:transform .15s,box-shadow .15s}
+.wa-flot:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(37,211,102,.55)}
+.wa-flot svg{flex:none}
+.wa-flot .wa-n{position:absolute;top:-6px;right:-4px;min-width:24px;height:24px;padding:0 7px;border-radius:999px;background:var(--red);color:#fff;font-size:.8rem;font-weight:900;display:grid;place-items:center;border:2px solid #fff}
+.wa-flot .wa-t{font-family:var(--font-price);font-size:.95rem;white-space:nowrap}
+.wa-flot:not(.con-pedido) .wa-t{display:none}
+@media(max-width:640px){.wa-flot{bottom:14px;left:12px;height:52px}.wa-flot .wa-t{font-size:.85rem}}
+@media print{.wa-flot{display:none!important}}

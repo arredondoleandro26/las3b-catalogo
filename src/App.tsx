@@ -3,6 +3,7 @@ import { useQuery } from "convex/react";
 import { obtenerCatalogo, type Catalogo } from "./api";
 import { Tarjeta } from "./components/Tarjeta";
 import { Carrito } from "./components/Carrito";
+import { BotonWhatsApp } from "./components/BotonWhatsApp";
 import { useCarrito } from "./hooks/useCarrito";
 import { fmt, norm } from "./lib/formato";
 
@@ -153,6 +154,8 @@ function Catalogo({ datos }: { datos: Catalogo }) {
       </footer>
 
       <Carrito abierto={carritoAbierto} onCerrar={() => setCarritoAbierto(false)} lineas={lineas} carrito={carrito} onCantidad={setCantidad} onVaciar={vaciar} ajustes={ajustes} />
+
+      <BotonWhatsApp lineas={lineas} carrito={carrito} ajustes={ajustes} />
 
       <button type="button" className={`totop${mostrarArriba ? " show" : ""}`} aria-label="Subir" onClick={() => window.scrollTo({ top: 0 })}>↑</button>
     </>
