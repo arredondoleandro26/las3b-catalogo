@@ -1,0 +1,25 @@
+{
+  "name": "las3b-catalogo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Catálogo público de precios de Jabonería Las 3B (React + Vite + Convex, solo lectura)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit -p tsconfig.json && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "convex": "^1.47.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  }
+}
