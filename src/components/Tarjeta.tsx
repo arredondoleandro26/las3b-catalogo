@@ -20,7 +20,7 @@ export const Tarjeta = memo(function Tarjeta({ p, icono, cantidad, onCantidad }:
       <div className="buy">
         <div className="pbox">
           {p.oferta && p.antes ? <span className="antes">Antes {fmt(p.antes)}</span> : null}
-          <div className="tag"><span className="cur">$</span><span className="num">{num(p.precio)}</span></div>
+          <div className="tag"><span className="cur">$</span><span className="num">{num(p.precio)}</span><span className="cu">c/u</span></div>
         </div>
         <div className="qty">
           {p.estado !== "disponible" ? (
