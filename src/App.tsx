@@ -5,6 +5,9 @@ import { Tarjeta } from "./components/Tarjeta";
 import { Carrito } from "./components/Carrito";
 import { BotonWhatsApp } from "./components/BotonWhatsApp";
 import { ZonaContacto } from "./components/ZonaContacto";
+
+// por si el backend todavía no envía la zona de contacto (se publica antes el catálogo que Convex)
+const SIN_CONTACTO = { telefono: "", correo: "", instagram: "", facebook: "", direccion: "", horario: "" };
 import { useCarrito } from "./hooks/useCarrito";
 import { fmt, norm } from "./lib/formato";
 
@@ -163,7 +166,7 @@ function Catalogo({ datos }: { datos: Catalogo }) {
           ))}
         </div>
 
-        <ZonaContacto ref={refContacto} refNombre={refNombre} contacto={ajustes.contacto} />
+        <ZonaContacto ref={refContacto} refNombre={refNombre} contacto={ajustes.contacto ?? SIN_CONTACTO} />
       </main>
 
       <footer className="pie">
