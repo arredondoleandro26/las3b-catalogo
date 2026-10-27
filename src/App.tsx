@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "convex/react";
 import { obtenerCatalogo, type Catalogo } from "./api";
 import { Tarjeta } from "./components/Tarjeta";
 import { Carrito } from "./components/Carrito";
 import { BotonWhatsApp } from "./components/BotonWhatsApp";
+import { ZonaContacto } from "./components/ZonaContacto";
 import { useCarrito } from "./hooks/useCarrito";
 import { fmt, norm } from "./lib/formato";
 
@@ -22,6 +23,20 @@ function Catalogo({ datos }: { datos: Catalogo }) {
   const [soloStock, setSoloStock] = useState(false);
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [mostrarArriba, setMostrarArriba] = useState(false);
+  const refContacto = useRef<HTMLElement>(null);
+  const refNombre = useRef<HTMLInputElement>(null);
+
+  /** Botón «Contacto»: baja al formulario y lo destaca un momento. */
+  function irContacto() {
+    const sec = refContacto.current;
+    if (!sec) return;
+    sec.scrollIntoView({ behavior: "smooth", block: "start" });
+    sec.classList.remove("flash");
+    void sec.offsetWidth; // reinicia la animación
+    sec.classList.add("flash");
+    // en el celular no se abre el teclado solo
+    if (matchMedia("(hover:hover)").matches) setTimeout(() => refNombre.current?.focus({ preventScroll: true }), 700);
+  }
 
   useEffect(() => {
     document.documentElement.style.setProperty("--brand", ajustes.color || "#0b7f80");
@@ -92,6 +107,7 @@ function Catalogo({ datos }: { datos: Catalogo }) {
           </div>
           {filtros("desk")}
           <span className="grow" />
+          <button type="button" className="ctbtn" aria-label="Contacto" title="Ir a la zona de contacto" onClick={irContacto}>✉️ <span>Contacto</span></button>
           <button type="button" className="cartbtn" aria-label="Ver mi pedido" onClick={() => setCarritoAbierto(true)}>
             🛒 <b>{unidades}</b> <span id="cartTotal">{unidades ? fmt(total) : ""}</span>
           </button>
@@ -105,6 +121,7 @@ function Catalogo({ datos }: { datos: Catalogo }) {
           <div className="pills">
             {ajustes.periodo && <span className="pill y">📅 Actualizado a la fecha: {ajustes.periodo}</span>}
             {ajustes.precioNota && <span className="pill b">{ajustes.precioNota}</span>}
+            <button type="button" className="pill heroct" onClick={irContacto}>✉️ Contacto</button>
           </div>
           {ajustes.aviso && <p className="aviso">{ajustes.aviso}</p>}
         </section>
@@ -145,6 +162,8 @@ function Catalogo({ datos }: { datos: Catalogo }) {
             </section>
           ))}
         </div>
+
+        <ZonaContacto ref={refContacto} refNombre={refNombre} contacto={ajustes.contacto} />
       </main>
 
       <footer className="pie">
