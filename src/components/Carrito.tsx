@@ -17,7 +17,7 @@ type Props = {
 export function textoPedido(lineas: Producto[], carrito: Cantidades, ajustes: Ajustes) {
   const total = lineas.reduce((s, p) => s + p.precio * carrito[p._id], 0);
   const items = lineas.map((p) => `• ${carrito[p._id]} x ${p.nombre} (${fmt(p.precio)} c/u) = ${fmt(p.precio * carrito[p._id])}`);
-  return `Hola ${ajustes.nombre}! Quisiera hacer este pedido:\n\n${items.join("\n")}\n\nTotal referencial: ${fmt(total)}\n(Precios según catálogo ${ajustes.periodo || ""})`.trim();
+  return `Hola ${ajustes.nombre}! Quisiera hacer este pedido:\n\n${items.join("\n")}\n\nTotal referencial: ${fmt(total)}`;
 }
 
 export function Carrito({ abierto, onCerrar, lineas, carrito, onCantidad, onVaciar, ajustes }: Props) {

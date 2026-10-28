@@ -18,7 +18,7 @@ export function BotonWhatsApp({ lineas, carrito, ajustes }: Props) {
   function abrir() {
     const texto = unidades
       ? textoPedido(lineas, carrito, ajustes)
-      : `Hola ${ajustes.nombre}! Quisiera hacer una consulta sobre el catálogo${ajustes.periodo ? ` de ${ajustes.periodo}` : ""}.`;
+      : `Hola ${ajustes.nombre}! Quisiera hacer una consulta sobre el catálogo.`;
     if (!unidades) toast("Tu pedido está vacío: se abrirá el chat para consultar.", 2200);
     window.open(`https://wa.me/${numero}?text=${encodeURIComponent(texto)}`, "_blank", "noopener");
   }
