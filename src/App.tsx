@@ -5,16 +5,18 @@ import { Tarjeta } from "./components/Tarjeta";
 import { Carrito } from "./components/Carrito";
 import { BotonWhatsApp } from "./components/BotonWhatsApp";
 import { ZonaContacto } from "./components/ZonaContacto";
+import { SeccionOfertas } from "./components/SeccionOfertas";
 
 // por si el backend todavía no envía la zona de contacto (se publica antes el catálogo que Convex)
 const SIN_CONTACTO = { telefono: "", correo: "", instagram: "", facebook: "", direccion: "", horario: "" };
 import { useCarrito } from "./hooks/useCarrito";
 import { fmt, norm } from "./lib/formato";
+import { CargandoBurbujas } from "./components/CargandoBurbujas";
 
 export default function App() {
   const datos = useQuery(obtenerCatalogo, {});
   if (datos === undefined) {
-    return <div className="cargando"><span className="sp" /><br />Cargando catálogo…</div>;
+    return <CargandoBurbujas modo="pantalla" texto="Cargando catálogo…" />;
   }
   return <Catalogo datos={datos} />;
 }
@@ -79,6 +81,14 @@ function Catalogo({ datos }: { datos: Catalogo }) {
       .filter((s) => s.lista.length > 0);
   }, [categorias, productos, soloStock, buscando, palabras]);
 
+  /** Productos en oferta, en el orden de sus categorías. Al buscar se ocultan: los resultados ya salen por categoría. */
+  const ofertas = useMemo(() => {
+    const ordenCat = new Map(categorias.map((c, i) => [c._id, i]));
+    return productos
+      .filter((p) => p.oferta && ordenCat.has(p.catId) && (!soloStock || p.estado === "disponible"))
+      .sort((a, b) => ordenCat.get(a.catId)! - ordenCat.get(b.catId)! || a.orden - b.orden);
+  }, [categorias, productos, soloStock]);
+
   const conteo = (catId: string) => productos.filter((p) => p.catId === catId).length;
   const tiles = categorias.filter((c) => conteo(c._id) > 0);
 
@@ -86,13 +96,14 @@ function Catalogo({ datos }: { datos: Catalogo }) {
   const unidades = lineas.reduce((s, p) => s + carrito[p._id], 0);
   const total = lineas.reduce((s, p) => s + p.precio * carrito[p._id], 0);
 
-  const irA = (id: string) => { document.getElementById(`cat-${id}`)?.scrollIntoView(); };
+  const irA = (id: string) => { document.getElementById(id === "ofertas" ? "ofertas" : `cat-${id}`)?.scrollIntoView(); };
 
   // Los filtros se repiten: en la barra superior (escritorio) y bajo la portada (móvil)
   const filtros = (extra: string) => (
     <>
       <select className={`jump ${extra}`} aria-label="Ir a departamento" value="" onChange={(e) => irA(e.target.value)}>
         <option value="">Ir a departamento…</option>
+        {ofertas.length > 0 && <option value="ofertas">🏷️ Ofertas</option>}
         {tiles.map((c) => <option key={c._id} value={c._id}>{c.icono} {c.nombre}</option>)}
       </select>
       <label className={`chk ${extra}`}><input type="checkbox" className="avail" checked={soloStock} onChange={(e) => setSoloStock(e.target.checked)} /><span>Solo con stock</span></label>
@@ -130,6 +141,10 @@ function Catalogo({ datos }: { datos: Catalogo }) {
         </section>
 
         <section className="wrap filters">{filtros("")}</section>
+
+        {ofertas.length > 0 && !buscando && (
+          <SeccionOfertas productos={ofertas} iconoDe={(p) => catPorId.get(p.catId)?.icono ?? "🛍️"} carrito={carrito} onCantidad={setCantidad} />
+        )}
 
         <section className="wrap tiles-wrap">
           <h2 className="sec-title">Departamentos</h2>

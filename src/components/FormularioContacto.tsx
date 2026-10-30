@@ -3,6 +3,7 @@ import { useMutation } from "convex/react";
 import { ConvexError } from "convex/values";
 import { enviarContacto } from "../api";
 import { LIMITES, validarContacto, type DatosContacto, type ErroresContacto } from "../lib/contacto";
+import { CargandoBurbujas } from "./CargandoBurbujas";
 
 const KEY = "las3b:contacto";
 const VACIO: DatosContacto = { nombre: "", telefono: "", correo: "", mensaje: "" };
@@ -90,6 +91,7 @@ export const FormularioContacto = forwardRef<HTMLInputElement, Props>(function F
 
   return (
     <form className="ct-form" noValidate onSubmit={(e) => void onSubmit(e)}>
+      {enviando && <CargandoBurbujas texto="Enviando solicitud…" />}
       {CAMPOS.map((c) => (
         <div key={c.k} className={`ct-f${c.full ? " full" : ""}`}>
           <label htmlFor={`ct-${c.k}`}>{c.label}</label>
